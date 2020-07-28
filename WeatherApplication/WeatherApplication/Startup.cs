@@ -31,6 +31,12 @@ namespace WeatherApplication
             services.AddSingleton<WeatherForecastService>();
             // added http client
             services.AddHttpClient();
+            //service name is metaweather
+            services.AddHttpClient("meta", c =>
+            {
+                //will pull from our configuration from out app.settings
+                c.BaseAddress = new Uri(Configuration.GetValue<string>("MetaAPI"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
