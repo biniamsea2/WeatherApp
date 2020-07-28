@@ -1,5 +1,69 @@
-﻿<h3>Component</h3>
+﻿@page "/Weather"
+
+@inject IHttpClientFactory _clientFactory
+
+<h3>Weather Data</h3>
+@if (string.IsNullOrWhiteSpace(errorString) == false)
+{
+    <div class="h2">@errorString</div>
+}
+else if (forecast is null)
+{
+    <div class="h4">Loading...</div>
+}
+
+else
+{
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Date</th>
+                <th>Summary</th>
+                <th>Low</th>
+                <th>High</th>
+                <th>Temp</th>
+            </tr>
+        </thead>
+        @foreach (var item in forecast.consolidated_weather)
+        {
+            <tr>
+                <td>@item.applicable_date</td>
+                <td>@item.weather_state_name</td>
+                <td>@item.min_temp</td>
+                <td>@item.max_temp</td>
+                <td>@item.the_temp</td>
+            </tr>
+        }
+    </table>
+}
 
 @code {
+    WeatherForecastModel forecast;
+    string errorString;
 
+    // run on initialized async
+    protected override async Task OnInitializedAsync()
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get,
+            "https://www.metaweather.com/api/location/2490383/");
+
+        //uses the factory to create a client for us. Pulls a client out or creates a new one, this avoids socket exhaustion
+        var client = _clientFactory.CreateClient();
+
+        // going to send a request out and get a response back
+        HttpResponseMessage response = await client.SendAsync(request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            // read the json file, format it into our forecast model then store it in a variable called forecast
+            forecast = await response.Content.ReadFromJsonAsync<WeatherForecastModel>();
+            errorString = null;
+        }
+
+        else
+        {
+            // will display message on error and the reason for the error if there was one
+            errorString = $"There was an error getting forecast: {response.ReasonPhrase}";
+        }
+    }
 }
