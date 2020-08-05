@@ -30,7 +30,7 @@ Then select and open ```WeatherApp.sln```
 ### Visuals
 
 ### Response
-![Image 1]()
+![Image 1](https://github.com/biniamsea2/WeatherApp/blob/master/Screenshot%20(150).png)
 
 ---
 
