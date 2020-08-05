@@ -30,6 +30,7 @@ Then select and open ```WeatherApp.sln```
 ### Visuals
 
 ### Response
+#### Displays the current weather and the upcoming weather for the next five days in Seattle, WA. 
 ![Image 1](https://github.com/biniamsea2/WeatherApp/blob/master/Screenshot%20(150).png)
 
 ---
